@@ -1,0 +1,2 @@
+rootProject.name = "MaoCycle"
+include ':app'
