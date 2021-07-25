@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.yanzhenjie.permission.AndPermission
@@ -28,6 +29,8 @@ private const val NUM_PAGES = 3
  */
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var mViewModel: MainViewModel
+
     private lateinit var mViewPager: ViewPager2
     private lateinit var mButtonArrow: Button
     private lateinit var mButtonStart: Button
@@ -39,6 +42,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mViewModel = ViewModelProvider(
+            this,
+            MainViewModelFactory(application)
+        ).get(MainViewModel::class.java)
 
         initView()
         requestPermission()
@@ -81,13 +88,18 @@ class MainActivity : AppCompatActivity() {
     private fun requestPermission() {
         AndPermission.with(this)
             .runtime()
-            .permission(Permission.ACCESS_COARSE_LOCATION)
+            .permission(
+                Permission.ACCESS_COARSE_LOCATION,
+                Permission.ACCESS_FINE_LOCATION,
+                Permission.READ_PHONE_STATE
+            )
             .onDenied { denied ->
                 val sb = StringBuilder()
                 for (deny: String in denied) {
                     sb.append(deny).append(',')
                 }
                 ToastUtil.showToast("onDenied: $sb")
+                mViewModel.startLocating()
             }
             .onGranted { granted ->
                 val sb = StringBuilder()
@@ -95,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                     sb.append(grant).append(',')
                 }
                 ToastUtil.showToast("onGranted: $sb")
+                mViewModel.startLocating()
             }
             .start()
     }
@@ -126,17 +139,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private inner class ViewPagerChangePageCallback: ViewPager2.OnPageChangeCallback() {
+    private inner class ViewPagerChangePageCallback : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             mButtonArrow.visibility = if (position == 0) {
-                 View.VISIBLE
+                View.VISIBLE
             } else {
                 View.GONE
             }
         }
     }
 
-    private inner class OnClickListenerImpl: View.OnClickListener {
+    private inner class OnClickListenerImpl : View.OnClickListener {
         override fun onClick(v: View?) {
             when (v) {
                 mButtonArrow -> {

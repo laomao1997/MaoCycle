@@ -5,6 +5,6 @@ import io.github.laomao1997.maocycle.MaoCycleApplication
 
 object ToastUtil {
     fun showToast(message: String) {
-        Toast.makeText(MaoCycleApplication.getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MaoCycleApplication.context, message, Toast.LENGTH_LONG).show();
     }
 }
