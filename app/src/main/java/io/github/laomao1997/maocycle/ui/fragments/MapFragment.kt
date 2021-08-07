@@ -1,4 +1,4 @@
-package io.github.laomao1997.maocycle.fragments
+package io.github.laomao1997.maocycle.ui.fragments
 
 import android.location.Location
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
-import io.github.laomao1997.maocycle.MainViewModel
+import io.github.laomao1997.maocycle.ui.MainViewModel
 import io.github.laomao1997.maocycle.R
 
 class MapFragment : Fragment() {

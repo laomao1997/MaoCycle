@@ -1,9 +1,10 @@
-package io.github.laomao1997.maocycle
+package io.github.laomao1997.maocycle.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -11,11 +12,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.runtime.Permission
-import io.github.laomao1997.maocycle.fragments.AllDataFragment
-import io.github.laomao1997.maocycle.fragments.BigSpeedFragment
-import io.github.laomao1997.maocycle.fragments.MapFragment
+import io.github.laomao1997.maocycle.R
+
+import io.github.laomao1997.maocycle.ui.fragments.AllDataFragment
+import io.github.laomao1997.maocycle.ui.fragments.BigSpeedFragment
+import io.github.laomao1997.maocycle.ui.fragments.MapFragment
+import io.github.laomao1997.maocycle.ui.transformer.ZoomOutPageTransformer
 import io.github.laomao1997.maocycle.utils.ToastUtil
-import java.lang.StringBuilder
 
 /**
  * 页面上 ViewPager2 所拥有的页面数量
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mViewModel: MainViewModel
 
     private lateinit var mViewPager: ViewPager2
+    private lateinit var mTextLocation: TextView
     private lateinit var mButtonArrow: Button
     private lateinit var mButtonStart: Button
 
@@ -49,6 +53,14 @@ class MainActivity : AppCompatActivity() {
 
         initView()
         requestPermission()
+        mViewModel.currentLocation.observe(this) {
+            val altitude = it.altitude
+            val longitude = it.longitude
+            val latitude = it.latitude
+
+            val locationString = "Altitude: $altitude, Longitude: $longitude, Latitude: $latitude."
+            mTextLocation.text = locationString
+        }
     }
 
     override fun onBackPressed() {
@@ -72,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         mViewPager = findViewById(R.id.view_pager)
         mButtonArrow = findViewById(R.id.btn_arrow)
         mButtonStart = findViewById(R.id.btn_start)
+        mTextLocation = findViewById(R.id.text_location)
 
         val onClickListenerImpl = OnClickListenerImpl()
         mButtonArrow.setOnClickListener(onClickListenerImpl)
@@ -112,6 +125,13 @@ class MainActivity : AppCompatActivity() {
             .start()
     }
 
+    /**
+     * 设置允许或禁用ViewPager的滑动效果
+     */
+    private fun allowViewPagerSlide(isAllowed: Boolean = true) {
+        mViewPager.isUserInputEnabled = isAllowed;
+    }
+
     private inner class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
         FragmentStateAdapter(fragmentActivity) {
 
@@ -146,6 +166,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 View.GONE
             }
+            allowViewPagerSlide(position != 0)
         }
     }
 

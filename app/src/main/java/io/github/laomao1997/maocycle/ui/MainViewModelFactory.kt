@@ -1,4 +1,4 @@
-package io.github.laomao1997.maocycle
+package io.github.laomao1997.maocycle.ui
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

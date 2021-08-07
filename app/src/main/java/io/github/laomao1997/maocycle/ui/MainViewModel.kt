@@ -1,9 +1,11 @@
-package io.github.laomao1997.maocycle
+package io.github.laomao1997.maocycle.ui
 
 import android.app.Application
 import android.location.Location
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import io.github.laomao1997.maocycle.Constants
+import io.github.laomao1997.maocycle.LocationProvider
 import kotlin.math.*
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {

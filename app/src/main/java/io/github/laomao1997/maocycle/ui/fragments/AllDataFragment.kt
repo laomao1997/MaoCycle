@@ -1,4 +1,4 @@
-package io.github.laomao1997.maocycle.fragments
+package io.github.laomao1997.maocycle.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
