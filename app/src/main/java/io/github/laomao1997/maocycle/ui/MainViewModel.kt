@@ -2,6 +2,8 @@ package io.github.laomao1997.maocycle.ui
 
 import android.app.Application
 import android.location.Location
+import android.location.LocationListener
+import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import io.github.laomao1997.maocycle.Constants
@@ -11,14 +13,6 @@ import kotlin.math.*
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var locationProvider: LocationProvider = LocationProvider(getApplication())
-
-    val longitude = MutableLiveData<Double>()
-
-    val latitude = MutableLiveData<Double>()
-
-    val speed = MutableLiveData<Float>()
-
-    val altitude = MutableLiveData<Double>()
 
     val avgSpeed = MutableLiveData<Float>()
 
@@ -37,19 +31,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun startLocating() {
-        locationProvider.requestLocation { newLocation ->
-            distance.value =
-                distance.value?.plus(calculateDistance(currentLocation.value, newLocation))
-            this.longitude.value = newLocation.longitude
-            this.latitude.value = newLocation.latitude
-            this.altitude.value = newLocation.altitude
-            currentLocation.value = newLocation
-            this.speed.value = newLocation.speed
-            if (this.maxSpeed.value == null || this.maxSpeed.value!! < newLocation.speed) {
-                this.maxSpeed.value = newLocation.speed
+        locationProvider.requestLocation(object : LocationListener {
+            override fun onLocationChanged(location: Location?) {
+                location?.let {
+                    distance.value =
+                        distance.value?.plus(calculateDistance(currentLocation.value, it))
+                    currentLocation.value = it
+                    if (maxSpeed.value == null || maxSpeed.value!! < it.speed) {
+                        maxSpeed.value = it.speed
+                    }
+                    calculateAvgSpeed(it.speed)
+                }
             }
-            calculateAvgSpeed(newLocation.speed)
-        }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+
+            }
+
+            override fun onProviderEnabled(provider: String?) {
+
+            }
+
+            override fun onProviderDisabled(provider: String?) {
+
+            }
+
+        })
     }
 
     private fun calculateAvgSpeed(speed: Float) {

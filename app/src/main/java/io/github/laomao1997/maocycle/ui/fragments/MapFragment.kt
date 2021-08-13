@@ -40,8 +40,8 @@ class MapFragment : Fragment() {
         mMapView.getMapAsync { mapboxMap ->
             this.mMapboxMap = mapboxMap
             this.mMapboxMap?.setStyle(Style.OUTDOORS)
-            if (mViewModel.latitude.value != null && mViewModel.longitude.value != null) {
-                updateMapCamera(mViewModel.latitude.value!!, mViewModel.longitude.value!!)
+            if (mViewModel.currentLocation.value != null) {
+                updateMapCamera(mViewModel.currentLocation.value!!.latitude, mViewModel.currentLocation.value!!.longitude)
             }
         }
     }

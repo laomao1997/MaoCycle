@@ -22,15 +22,9 @@ class LocationProvider(private var context: Context) {
         criteria.accuracy = Criteria.ACCURACY_COARSE
         val providerList: List<String> = locationManager.getProviders(true)
         val providerName = when {
-            providerList.contains(LocationManager.GPS_PROVIDER) -> {
-                LocationManager.GPS_PROVIDER;
-            }
-            providerList.contains(LocationManager.NETWORK_PROVIDER) -> {
-                LocationManager.NETWORK_PROVIDER;
-            }
-            else -> {
-                ""
-            }
+            providerList.contains(LocationManager.GPS_PROVIDER) -> LocationManager.GPS_PROVIDER
+            providerList.contains(LocationManager.NETWORK_PROVIDER) -> LocationManager.NETWORK_PROVIDER
+            else -> Constants.EMPTY_STRING
         }
 
         // 校验权限

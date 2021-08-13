@@ -7,4 +7,5 @@ object Constants {
     const val EARTH_RADIUS: Double = 6378137.0;//赤道半径
 
     const val SOURCE_ID_MAP_LINE = "line-source"
+    const val EMPTY_STRING = ""
 }

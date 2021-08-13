@@ -1,4 +1,4 @@
-package io.github.laomao1997.maocycle.ui.transformer
+package io.github.laomao1997.maocycle.transformer
 
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2

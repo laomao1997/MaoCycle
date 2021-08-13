@@ -14,11 +14,12 @@ import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.runtime.Permission
 import io.github.laomao1997.maocycle.R
 
+import io.github.laomao1997.maocycle.utils.ToastUtil
 import io.github.laomao1997.maocycle.ui.fragments.AllDataFragment
 import io.github.laomao1997.maocycle.ui.fragments.BigSpeedFragment
+import io.github.laomao1997.maocycle.transformer.ZoomOutPageTransformer
 import io.github.laomao1997.maocycle.ui.fragments.MapFragment
-import io.github.laomao1997.maocycle.ui.transformer.ZoomOutPageTransformer
-import io.github.laomao1997.maocycle.utils.ToastUtil
+import java.lang.StringBuilder
 
 /**
  * 页面上 ViewPager2 所拥有的页面数量
@@ -161,6 +162,7 @@ class MainActivity : AppCompatActivity() {
 
     private inner class ViewPagerChangePageCallback : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
+            mViewPager.isUserInputEnabled = (position != 0)
             mButtonArrow.visibility = if (position == 0) {
                 View.VISIBLE
             } else {
